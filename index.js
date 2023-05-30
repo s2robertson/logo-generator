@@ -21,18 +21,25 @@ const questions = [{
         return prevValues.text.length > 0;
     }
 }, {
-    name: 'Shape',
+    name: 'shape',
     type: 'list',
     message: 'Choose a shape for your logo: ',
     choices: [{
         name: 'Triangle',
-        value: Triangle
+        value: {
+            class: Triangle,
+            textY: Text.defaultY + 30
+        }
      }, {
         name: 'Circle',
-        value: Circle
+        value: {
+            class: Circle
+        }
      }, {
         name: 'Square',
-        value: Square
+        value: {
+            class: Square
+        }
      }]
 }, {
     name: 'shapeColor',
@@ -53,9 +60,10 @@ const questions = [{
 
 inquirer.prompt(questions)
 .then(answers => {
-    let elements = [new answers.Shape(answers.shapeColor, answers.shapeColorFill)];
+    let elements = [new answers.shape.class(answers.shapeColor, answers.shapeColorFill)];
     if (answers.text) {
-        elements.push(new Text(answers.text, answers.textColor));
+        const y = answers.shape.textY || Text.defaultY;
+        elements.push(new Text(answers.text, answers.textColor, { y }));
     }
     const logo = new Logo(...elements);
     return fs.writeFile(answers.outputFile, logo.render());
