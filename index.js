@@ -10,7 +10,10 @@ const questions = [{
     type: 'input',
     message: 'Enter text to place in your logo (max three characters): ',
     validate: function(value) {
-        return value.length <= 3;
+        if (value.length > 3) {
+            return 'Too long (max three characters)';
+        }
+        return true;
     }
 }, {
     name: 'textColor',
@@ -28,7 +31,7 @@ const questions = [{
         name: 'Triangle',
         value: {
             class: Triangle,
-            textY: Text.defaultY + 30
+            textOffsetY: 30
         }
      }, {
         name: 'Circle',
@@ -62,7 +65,7 @@ inquirer.prompt(questions)
 .then(answers => {
     let elements = [new answers.shape.class(answers.shapeColor, answers.shapeColorFill)];
     if (answers.text) {
-        const y = answers.shape.textY || Text.defaultY;
+        const y = Text.defaultY + (answers.shape.textOffsetY ?? 0);
         elements.push(new Text(answers.text, answers.textColor, { y }));
     }
     const logo = new Logo(...elements);
