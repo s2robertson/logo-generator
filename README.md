@@ -12,7 +12,7 @@ The program can be launched with either `node index.js` or `npm start`.  The col
 [CSS color values](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).  The shape's color
 can either fill the shape, or be used as an outline.
 
-[Watch a sample usage video](https://drive.google.com/file/d/1xd2oiuHk4k5MTe6Fbd3XCxu4pz-GumhR/view)
+[Watch a sample usage video](https://drive.google.com/file/d/1fzW6CEKMQ4CqQw8rGQxIJ_VVs1jLQxZE/view)
 
 ## Credits
 The logo generator app uses the [inquirer](https://www.npmjs.com/package/inquirer/v/8.2.4) package
