@@ -18,7 +18,7 @@ const questions = [{
 }, {
     name: 'textColor',
     type: 'input',
-    message: 'Enter a color for your text: ',
+    message: 'Enter a color for your text:',
     default: 'white',
     when: function(prevValues) {
         return prevValues.text.length > 0;
@@ -26,7 +26,7 @@ const questions = [{
 }, {
     name: 'shape',
     type: 'list',
-    message: 'Choose a shape for your logo: ',
+    message: 'Choose a shape for your logo:',
     choices: [{
         name: 'Triangle',
         value: {
@@ -47,32 +47,34 @@ const questions = [{
 }, {
     name: 'shapeColor',
     type: 'input',
-    message: 'Enter a color for your shape: ',
+    message: 'Enter a color for your shape:',
     default: 'black'
 }, {
     name: 'shapeColorFill',
     type: 'confirm',
-    message: 'Fill your shape with a solid color? ',
+    message: 'Fill your shape with a solid color?',
     default: true
 }, {
     name: 'outputFile',
     type: 'input',
-    message: 'Enter a file path for your logo to be output to: ',
+    message: 'Enter a file path for your logo to be output to:',
     default: './logo.svg'
 }];
 
-inquirer.prompt(questions)
-.then(answers => {
-    let elements = [new answers.shape.class(answers.shapeColor, answers.shapeColorFill)];
-    if (answers.text) {
-        const y = Text.defaultY + (answers.shape.textOffsetY ?? 0);
-        elements.push(new Text(answers.text, answers.textColor, { y }));
+(async function() {
+    try {
+        const answers = await inquirer.prompt(questions)
+    
+        let elements = [new answers.shape.class(answers.shapeColor, answers.shapeColorFill)];
+        if (answers.text) {
+            const y = Text.defaultY + (answers.shape.textOffsetY ?? 0);
+            elements.push(new Text(answers.text, answers.textColor, { y }));
+        }
+        const logo = new Logo(...elements);
+        await fs.writeFile(answers.outputFile, logo.render());
+        console.log(`Generated ${answers.outputFile}`);
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
     }
-    const logo = new Logo(...elements);
-    return fs.writeFile(answers.outputFile, logo.render());
-}).then(() => {
-    console.log('Done!');
-}).catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+})()
